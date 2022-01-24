@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@models/*": ["models/*"],
+      "@controllers/*": ["controllers/*"],
+      "@config/*": ["config/*"]
+    }
+  }
+}
