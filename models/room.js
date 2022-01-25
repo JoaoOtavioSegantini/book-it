@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'
+/* eslint-disable @typescript-eslint/no-var-requires */
+const mongoose = require('mongoose')
 
 const roomSchema = new mongoose.Schema({
   name: {
@@ -95,7 +96,7 @@ const roomSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true
+    required: false
   },
   createdAt: {
     type: Date,
@@ -103,4 +104,4 @@ const roomSchema = new mongoose.Schema({
   }
 })
 
-export default mongoose.models.Room || mongoose.model('Room', roomSchema)
+module.exports = mongoose.models.Room || mongoose.model('Room', roomSchema)

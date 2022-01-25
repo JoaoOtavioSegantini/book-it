@@ -22,7 +22,7 @@
     "incremental": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules", "utils/seeder"
   ],
   "include": [
     "next-env.d.ts",
