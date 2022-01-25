@@ -1,19 +1,35 @@
+import { Query } from 'mongoose'
+import { NextApiRequest } from 'next'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface apiConstructor {
-  query: any
-  queryStr: any
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  query: Query<any[], any, {}, any>
+  queryStr: NextApiRequest['query']
 }
 
 interface Api {
-  search(): any
+  search: () => this
+  filter: () => this
 }
 
 class ApiFeatures implements apiConstructor, Api {
-  query: any
-  queryStr: any
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  query: Query<any[], any, {}, any>
+  queryStr: NextApiRequest['query']
   constructor(query: any, querStr: any) {
     this.query = query
     this.queryStr = querStr
+  }
+  filter() {
+    const queryCopy = { ...this.queryStr }
+
+    // remove fields for query
+    const removeFields = ['location']
+    removeFields.forEach((el) => delete queryCopy[el])
+
+    this.query = this.query.find(queryCopy)
+    return this
   }
   search() {
     const location = this.queryStr.location

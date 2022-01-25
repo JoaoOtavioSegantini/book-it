@@ -2,10 +2,15 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Room from '@models/room'
 import catchAsync from '@middlewares/catchAsync'
 import ErrorHandler from '@utils/errorHandler'
+import ApiFeatures from '@utils/apiFeatures'
 
 export const allRooms = catchAsync(
   async (req: NextApiRequest, res: NextApiResponse) => {
-    const rooms = await Room.find()
+    const apiFeatures = new ApiFeatures(Room.find(), req.query)
+      .search()
+      .filter()
+
+    const rooms = await apiFeatures.query
     res.status(200).json({
       success: true,
       count: rooms.length,
