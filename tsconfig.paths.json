@@ -4,8 +4,10 @@
       "@models/*": ["models/*"],
       "@controllers/*": ["controllers/*"],
       "@config/*": ["config/*"],
+      "@components": ["components"],
       "@components/*": ["components/*"],
       "@utils/*": ["utils/*"],
+      "@styles/*": ["styles/*"],
       "@middlewares/*": ["middlewares/*"]
     }
   }

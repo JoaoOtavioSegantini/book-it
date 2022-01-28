@@ -8,6 +8,10 @@ const roomSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, 'o nome não pode exceder a 100 caracteres']
   },
+  price: {
+    type: Number,
+    required: false
+  },
   description: {
     type: String,
     required: [true, 'A descrição é obrigatória']

@@ -1,0 +1,6 @@
+export { default as Home } from './Home'
+export { default as Layout } from './Layout'
+export { default as RoomItem } from './RoomItem'
+export { default as Details } from './RoomDetails'
+export { default as Features } from './RoomFeatures'
+export { default as Search } from './Search'
