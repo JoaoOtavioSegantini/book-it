@@ -1,3 +1,5 @@
+import { User } from './user'
+
 export type Room = {
   _id: string
   name: string
@@ -21,13 +23,13 @@ export type Room = {
   category: 'King' | 'Single' | 'Twins'
   reviews: [
     {
-      user: 'User'
+      user: User
       name: string
       rating: number
       comment: string
     }
   ]
-  user: 'User'
+  user: User
   createdAt: Date
   price: number
 }

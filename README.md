@@ -2,7 +2,24 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First,
+
+create environment variables using:
+
+SECRET_JWT=`openssl rand -base64 64`
+JWT_SECRET=`npx node-jose-tools newkey -s 256 -t oct -a HS512`
+CLOUD_NAME=`create account in https://cloudinary.com and store respective variable`
+API_KEY=`create account in https://cloudinary.com and store respective variable`
+API_SECRET=`create account in https://cloudinary.com and store respective variable`
+NEXTAUTH_URL=http://localhost:3000
+
+If you set jwt.encryption: true in next-auth configuration, you must set the JWT_ENCRYPTION_KEY env variable using:
+JWT_ENCRYPTION_KEY=`npx node-jose-tools newkey -s 256 -t oct -a A256GCM -u enc` and define variable in next-auth
+configuration: jwt.encryptionKey: process.env.JWT_ENCRYPTION_KEY
+
+2) Create a file named .env.local and store respectives variables and
+
+3) Run the development server:
 
 ```bash
 npm run dev

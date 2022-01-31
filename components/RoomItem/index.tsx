@@ -21,7 +21,7 @@ const RoomItem = ({ room }: Props) => {
           <h5 className="card-title">
             <Link href={`/room/${room._id}`}>{room.name}</Link>
           </h5>
-          <div className="ratings mx-auto mb-3">
+          <div className="ratings mt-auto mb-3">
             <p className="card-text">
               <b>${room.price}</b> / per night
             </p>
