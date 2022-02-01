@@ -6,14 +6,14 @@ First,
 
 create environment variables using:
 
-SECRET_JWT=`openssl rand -base64 64`
-JWT_SECRET=`npx node-jose-tools newkey -s 256 -t oct -a HS512`
-CLOUD_NAME=`create account in https://cloudinary.com and store respective variable`
-API_KEY=`create account in https://cloudinary.com and store respective variable`
-API_SECRET=`create account in https://cloudinary.com and store respective variable`
-NEXTAUTH_URL=http://localhost:3000
+- SECRET_JWT=`openssl rand -base64 64`
+- JWT_SECRET=`npx node-jose-tools newkey -s 256 -t oct -a HS512`
+- CLOUD_NAME=`create account in https://cloudinary.com and store respective variable`
+- API_KEY=`create account in https://cloudinary.com and store respective variable`
+- API_SECRET=`create account in https://cloudinary.com and store respective variable`
+- NEXTAUTH_URL=http://localhost:3000
 
-The cloudinary envoriment variables are defined in .env.example, set your values with your keys created in your cloudinary account.
+The mailtrap envoriment variables are defined in .env.example, set your values with your keys created in your mailtrap account.
 
 If you set jwt.encryption: true in next-auth configuration, you must set the JWT_ENCRYPTION_KEY env variable using:
 JWT_ENCRYPTION_KEY=`npx node-jose-tools newkey -s 256 -t oct -a A256GCM -u enc` and define variable in next-auth

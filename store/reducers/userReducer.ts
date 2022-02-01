@@ -21,7 +21,6 @@ import {
 
 export const authReducer = (state = { user: null }, action: AnyAction) => {
   switch (action.type) {
-    case UPDATE_USER_PROFILE_REQUEST:
     case REGISTER_USER_REQUEST:
       return {
         loading: true
@@ -86,7 +85,7 @@ export const loadedUserReducer = (
   }
 }
 
-export const userReducer = (state = {}, action: AnyAction) => {
+export const userReducer = (state = { error: null }, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_USER_PROFILE_REQUEST:
       return {

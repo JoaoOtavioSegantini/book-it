@@ -61,8 +61,7 @@ const Profile = () => {
       router.push('/')
       dispatch({ type: UPDATE_PROFILE_RESET })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isUpdated, error, loadedUser])
+  }, [dispatch, isUpdated, error, loadedUser, router])
 
   const submitHandler = (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -112,7 +111,7 @@ const Profile = () => {
                     id="name_field"
                     className="form-control"
                     name="name"
-                    value={name}
+                    value={name || ''}
                     onChange={onChange}
                   />
                 </div>
@@ -124,7 +123,7 @@ const Profile = () => {
                     id="email_field"
                     className="form-control"
                     name="email"
-                    value={email}
+                    value={email || ''}
                     onChange={onChange}
                   />
                 </div>
@@ -136,7 +135,7 @@ const Profile = () => {
                     id="password_field"
                     className="form-control"
                     name="password"
-                    value={password}
+                    value={password || ''}
                     onChange={onChange}
                   />
                 </div>
@@ -173,7 +172,7 @@ const Profile = () => {
                   id="login_button"
                   type="submit"
                   className="btn btn-block py-3"
-                  disabled={updateLoading ? true : false}
+                  disabled={updateLoading}
                 >
                   {updateLoading ? <ButtonLoader /> : 'UPDATE'}
                 </button>
