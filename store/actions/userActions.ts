@@ -18,14 +18,8 @@ import {
   UPDATE_USER_PROFILE_REQUEST,
   UPDATE_USER_PROFILE_SUCCESS
 } from 'store/constants/userContants'
+import { ErrorResponse } from 'types/error'
 
-export type ErrorResponse = {
-  response: {
-    data: {
-      message: string
-    }
-  }
-}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const authUser = (userData: any) => async (dispatch: Dispatch) => {
   try {

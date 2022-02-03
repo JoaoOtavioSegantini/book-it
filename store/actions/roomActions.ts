@@ -10,14 +10,8 @@ import aboluteUrl from 'next-absolute-url'
 import { NextApiRequest } from 'next'
 import { Dispatch } from 'redux'
 import { Params } from 'next/dist/server/router'
+import { ErrorResponse } from 'types/error'
 
-export type ErrorResponse = {
-  response: {
-    data: {
-      message: string
-    }
-  }
-}
 export const getRooms =
   (
     req: NextApiRequest,

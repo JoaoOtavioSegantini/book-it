@@ -3,10 +3,18 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { Carousel } from 'react-bootstrap'
-import { Features } from '@components'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { clearErrors } from 'store/actions/roomActions'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+
+import { Features } from '@components'
+import { UserState } from '@components/Layout/Header'
+import router from 'next/router'
+import axios from 'axios'
+import { checkBooking } from 'store/actions/bookingAction'
+import { ErrorResponse } from 'types/error'
 
 type Props = {
   roomDetails: {
@@ -15,8 +23,25 @@ type Props = {
   }
 }
 
+type CheckBookingState = {
+  checkingBook: {
+    available: boolean
+    error: Error
+    loading: boolean
+  }
+}
+
 const RoomDetails = () => {
+  const [checkInDate, setCheckInDate] = useState()
+  const [checkOutDate, setCheckOutDate] = useState()
+  const [daysOfStay, setDaysOfStay] = useState<number>()
+
+  const { user } = useSelector((state: UserState) => state.currentUser)
   const { room, error } = useSelector((state) => (state as Props).roomDetails)
+  const { available, loading: bookingLoading } = useSelector(
+    (state: CheckBookingState) => state.checkingBook
+  )
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -24,6 +49,68 @@ const RoomDetails = () => {
     dispatch(clearErrors())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onChange = (dates: any) => {
+    const [checkInDate, checkOutDate] = dates
+    setCheckInDate(checkInDate)
+    setCheckOutDate(checkOutDate)
+
+    if (checkInDate && checkOutDate) {
+      const days = Math.floor(
+        (Number(new Date(checkOutDate)) - Number(new Date(checkInDate))) /
+          86400000 +
+          1
+      )
+
+      setDaysOfStay(days)
+
+      const availableData = {
+        roomId: id as string,
+        checkInDate,
+        checkOutDate
+      }
+
+      dispatch(checkBooking(availableData))
+    }
+  }
+
+  useEffect(() => {
+    toast.error(error)
+    dispatch(clearErrors())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const { id } = router.query
+
+  const newBookingHandler = async () => {
+    const bookingData = {
+      room: router.query.id,
+      checkInDate,
+      checkOutDate,
+      daysOfStay,
+      amountPaid: 90,
+      paymentInfo: {
+        id: 'STRIPE_PAYMENT_ID',
+        status: 'STRIPE_PAYMENT_STATUS'
+      }
+    }
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      const { data } = await axios.post('/api/bookings', bookingData, config)
+
+      console.log(data)
+    } catch (error) {
+      console.log((error as ErrorResponse).response)
+    }
+  }
+
   return (
     <>
       <Head>
@@ -57,7 +144,61 @@ const RoomDetails = () => {
               </Carousel.Item>
             ))}
         </Carousel>
-        <Features room={room} />
+        <div className="row my-5">
+          <div className="col-12 col-md-6 col-lg-8">
+            <h3>Description</h3>
+            <p>{room.description}</p>
+
+            <Features room={room} />
+          </div>
+          <div className="col-12 col-md-6 col-lg-4">
+            <div className="booking-card shadow-lg p-4">
+              <p className="price-per-night">
+                <b>${room.price}</b> / night
+              </p>
+
+              <hr />
+
+              <p className="mt-5 mb-3">Pick Check In & Check Out Date</p>
+              <DatePicker
+                className="w-100"
+                selected={checkInDate}
+                onChange={onChange}
+                startDate={checkInDate}
+                endDate={checkOutDate}
+                minDate={new Date()}
+                selectsRange
+                inline
+              />
+              {available === true && (
+                <div className="alert alert-success my-3 font-weight-bold">
+                  Room is available. Book now.
+                </div>
+              )}
+
+              {available === false && (
+                <div className="alert alert-danger my-3 font-weight-bold">
+                  Room not available. Try different dates.
+                </div>
+              )}
+
+              {available && !user && (
+                <div className="alert alert-danger my-3 font-weight-bold">
+                  Login to book room.
+                </div>
+              )}
+              {available && user && (
+                <button
+                  disabled={bookingLoading}
+                  className="btn btn-block py-3 booking-btn"
+                  onClick={newBookingHandler}
+                >
+                  Pay
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="reviews w-75">
           <h3>Reviews:</h3>
           <hr />

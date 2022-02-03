@@ -85,7 +85,7 @@ export const loadedUserReducer = (
   }
 }
 
-export const userReducer = (state = { error: null }, action: AnyAction) => {
+export const userReducer = (state = {}, action: AnyAction) => {
   switch (action.type) {
     case UPDATE_USER_PROFILE_REQUEST:
       return {
