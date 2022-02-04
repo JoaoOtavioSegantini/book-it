@@ -2,6 +2,7 @@ import { Room } from './room'
 import { User } from './user'
 
 export type Booking = {
+  _id: string
   room: Room
   user: User
   checkInDate: Date

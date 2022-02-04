@@ -13,8 +13,9 @@ import { Features } from '@components'
 import { UserState } from '@components/Layout/Header'
 import router from 'next/router'
 import axios from 'axios'
-import { checkBooking } from 'store/actions/bookingAction'
+import { checkBooking, getBookedDates } from 'store/actions/bookingAction'
 import { ErrorResponse } from 'types/error'
+import { CHECK_BOOKING_RESET } from 'store/constants/bookingContants'
 
 type Props = {
   roomDetails: {
@@ -31,6 +32,14 @@ type CheckBookingState = {
   }
 }
 
+type CheckBookedState = {
+  bookedDates: {
+    dates: [Date]
+    error: Error
+    loading: boolean
+  }
+}
+
 const RoomDetails = () => {
   const [checkInDate, setCheckInDate] = useState()
   const [checkOutDate, setCheckOutDate] = useState()
@@ -38,18 +47,31 @@ const RoomDetails = () => {
 
   const { user } = useSelector((state: UserState) => state.currentUser)
   const { room, error } = useSelector((state) => (state as Props).roomDetails)
+  const { dates } = useSelector((state: CheckBookedState) => state.bookedDates)
+
   const { available, loading: bookingLoading } = useSelector(
     (state: CheckBookingState) => state.checkingBook
   )
 
+  const excludedDates: Date[] | undefined = []
+  dates.forEach((date: string | number | Date) => {
+    excludedDates.push(new Date(date))
+  })
+
   const dispatch = useDispatch()
+  const { id } = router.query
 
   useEffect(() => {
+    dispatch(getBookedDates(id as string))
+
     toast.error(error)
     dispatch(clearErrors())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
+    return () => {
+      dispatch({ type: CHECK_BOOKING_RESET })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, id])
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (dates: any) => {
     const [checkInDate, checkOutDate] = dates
@@ -80,8 +102,6 @@ const RoomDetails = () => {
     dispatch(clearErrors())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const { id } = router.query
 
   const newBookingHandler = async () => {
     const bookingData = {
@@ -169,6 +189,7 @@ const RoomDetails = () => {
                 minDate={new Date()}
                 selectsRange
                 inline
+                excludeDates={excludedDates}
               />
               {available === true && (
                 <div className="alert alert-success my-3 font-weight-bold">
