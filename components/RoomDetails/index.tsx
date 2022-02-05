@@ -156,12 +156,19 @@ const RoomDetails = ({ id }: PropsBase) => {
           {room.images &&
             room.images.map((image) => (
               <Carousel.Item key={image.public_id}>
-                <div style={{ width: '100%', height: '440px' }}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '440px',
+                    position: 'relative'
+                  }}
+                >
                   <Image
                     src={image.url}
                     alt={room.name}
                     className="d-block m-auto"
                     layout="fill"
+                    priority={true}
                   />
                 </div>
               </Carousel.Item>
