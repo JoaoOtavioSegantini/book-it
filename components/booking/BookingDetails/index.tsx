@@ -34,8 +34,6 @@ const BookingDetails = () => {
   const isPaid =
     booking.paymentInfo && booking.paymentInfo.status === 'paid' ? true : false
 
-  console.log(booking)
-
   return (
     <div className="container">
       <div className="row d-flex justify-content-between">
