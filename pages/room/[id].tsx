@@ -4,10 +4,13 @@ import { AnyAction } from 'redux'
 import { wrapper } from 'store'
 import { getRoomDetails } from 'store/actions/roomActions'
 
-const RoomDetails = () => {
+type Props = {
+  id: string
+}
+const RoomDetails = ({ id }: Props) => {
   return (
     <Layout>
-      <Details />
+      <Details id={id} />
     </Layout>
   )
 }
@@ -24,5 +27,9 @@ export const getServerSideProps = (wrapper as any).getServerSideProps(
     async ({ req, params }: any) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await store.dispatch(getRoomDetails(req, params.id) as any)
+
+      return {
+        props: { id: params.id }
+      }
     }
 )

@@ -9,9 +9,9 @@ import { clearErrors } from 'store/actions/roomActions'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { Features } from '@components'
+import { Features, ListReviews, NewReview } from '@components'
 import { UserState } from '@components/Layout/Header'
-import router from 'next/router'
+//import router from 'next/router'
 import axios from 'axios'
 import { checkBooking, getBookedDates } from 'store/actions/bookingAction'
 import { ErrorResponse } from 'types/error'
@@ -40,7 +40,11 @@ type CheckBookedState = {
   }
 }
 
-const RoomDetails = () => {
+type PropsBase = {
+  id: string
+}
+
+const RoomDetails = ({ id }: PropsBase) => {
   const [checkInDate, setCheckInDate] = useState()
   const [checkOutDate, setCheckOutDate] = useState()
   const [daysOfStay, setDaysOfStay] = useState<number>()
@@ -59,10 +63,9 @@ const RoomDetails = () => {
   })
 
   const dispatch = useDispatch()
-  const { id } = router.query
 
   useEffect(() => {
-    dispatch(getBookedDates(id as string))
+    dispatch(getBookedDates(id))
 
     toast.error(error)
     dispatch(clearErrors())
@@ -88,7 +91,7 @@ const RoomDetails = () => {
       setDaysOfStay(days)
 
       const availableData = {
-        roomId: id as string,
+        roomId: id,
         checkInDate,
         checkOutDate
       }
@@ -105,7 +108,7 @@ const RoomDetails = () => {
 
   const newBookingHandler = async () => {
     const bookingData = {
-      room: router.query.id,
+      room: id, //router.query.id,
       checkInDate,
       checkOutDate,
       daysOfStay,
@@ -214,24 +217,20 @@ const RoomDetails = () => {
                   className="btn btn-block py-3 booking-btn"
                   onClick={newBookingHandler}
                 >
-                  Pay
+                  Pay - ${daysOfStay && daysOfStay * room.price}
                 </button>
               )}
             </div>
           </div>
         </div>
-        <div className="reviews w-75">
-          <h3>Reviews:</h3>
-          <hr />
-          <div className="review-card my-3">
-            <div className="rating-outer">
-              <div className="rating-inner"></div>
-              <p className="review_user">by John</p>
-              <p className="review_comment">Good Quality</p>
-              <hr />
-            </div>
-          </div>
-        </div>
+        <NewReview id={id} />
+        {room.reviews && room.reviews.length > 0 ? (
+          <ListReviews reviews={room.reviews} />
+        ) : (
+          <p>
+            <b>No Reviews on this room</b>
+          </p>
+        )}
       </div>
     </>
   )
