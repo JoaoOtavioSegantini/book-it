@@ -1,3 +1,4 @@
+import { Review } from './review'
 import { User } from './user'
 
 export type Room = {
@@ -21,14 +22,7 @@ export type Room = {
     }
   ]
   category: 'King' | 'Single' | 'Twins'
-  reviews: [
-    {
-      user: User
-      name: string
-      rating: number
-      comment: string
-    }
-  ]
+  reviews: [Review]
   user: User
   createdAt: Date
   price: number
