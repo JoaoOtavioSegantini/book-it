@@ -7,12 +7,20 @@ import { toast } from 'react-toastify'
 import { clearErrors } from 'store/actions/bookingAction'
 import { Booking } from 'types/booking'
 
-type Rows = {
+export type Rows = {
   id: string
-  checkIn: string
-  checkOut: string
-  amount: string
+  checkIn?: string
+  checkOut?: string
+  amount?: string
   actions: React.ReactNode
+  name?: string
+  price?: string
+  category?: 'King' | 'Single' | 'Twins'
+  rating?: number
+  comment?: string
+  user?: string
+  email?: string
+  role?: string
 }[]
 
 type Props = {

@@ -9,4 +9,6 @@ export type User = {
   password?: string
   role?: string
   createdAt?: Date
+  resetPasswordToken?: string
+  resetPasswordExpire?: Date
 }
